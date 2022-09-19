@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "better-status-discord",
-    "version": "0.0.0"
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 900,
         "resizable": true,
-        "title": "better-status-discord",
-        "width": 800
+        "title": "Better Status",
+        "width": 1500
       }
     ]
   }

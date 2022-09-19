@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import Image from "next/image";
-import reactLogo from "../assets/react.svg";
-import tauriLogo from "../assets/tauri.svg";
-import nextLogo from "../assets/next.svg";
+import { Button, Container, Switch, useTheme } from "@nextui-org/react";
+import Prensences from "../components/Presences/Presences";
+import AppNavbar from "../components/Presences/AppNavbar";
+import { Box } from "../components/Box";
+import Prensence from "../components/Presences/Presence";
+import CreatePresence from "../components/Presences/CreatePresence";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -15,62 +17,24 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
+    <Box
+      css={{
+        maxW: "100%",
+        minHeight: "1050px",
+      }}
+    >
+      <AppNavbar />
 
-      <div className="row">
-        <span className="logos">
-          <a href="https://nextjs.org" target="_blank">
-            <Image
-              width={144}
-              height={144}
-              src={nextLogo}
-              className="logo next"
-              alt="Next logo"
-            />
-          </a>
-        </span>
-        <span className="logos">
-          <a href="https://tauri.app" target="_blank">
-            <Image
-              width={144}
-              height={144}
-              src={tauriLogo}
-              className="logo tauri"
-              alt="Tauri logo"
-            />
-          </a>
-        </span>
-        <span className="logos">
-          <a href="https://reactjs.org" target="_blank">
-            <Image
-              width={144}
-              height={144}
-              src={reactLogo}
-              className="logo react"
-              alt="React logo"
-            />
-          </a>
-        </span>
-      </div>
-
-      <p>Click on the Tauri, Next, and React logos to learn more.</p>
-
-      <div className="row">
-        <div>
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
-          />
-          <button type="button" onClick={() => greet()}>
-            Greet
-          </button>
-        </div>
-      </div>
-
-      <p>{greetMsg}</p>
-    </div>
+      <Container>
+        <Prensences>
+          <CreatePresence></CreatePresence>
+          <Prensence title="Youtube" description="Youtube Rich Presence" />
+          <Prensence title="Youtube" description="Youtube Rich Presence" />
+          <Prensence title="Youtube" description="Youtube Rich Presence" />
+          <Prensence title="Youtube" description="Youtube Rich Presence" />
+        </Prensences>
+      </Container>
+    </Box>
   );
 }
 
