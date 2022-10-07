@@ -1,4 +1,5 @@
-import { Grid, Card, Col, Button, Text, Input } from "@nextui-org/react";
+import { Button, Card, Grid, Row, Text } from "@nextui-org/react";
+import Link from "next/link";
 
 const CreatePresence = () => {
   return (
@@ -24,22 +25,23 @@ const CreatePresence = () => {
           >
             <Grid.Container gap={1} justify="center">
               <Grid>
-                <Input
-                  clearable
-                  bordered
-                  label="App ID"
-                  placeholder="000000000000"
-                  type="text"
-                  required
-                  status="default"
-                  color="default"
-                />
-              </Grid>
+                <Row justify="center">
+                  <Grid>
+                    <Text h3 color="white">
+                      New Presence
+                    </Text>
+                  </Grid>
+                </Row>
 
-              <Grid>
-                <Button auto color="success">
-                  Connect
-                </Button>
+                <Row justify="center">
+                  <Grid>
+                    <Button auto color="success">
+                      <Link href="/new" passHref={true}>
+                        <Text>Create</Text>
+                      </Link>
+                    </Button>
+                  </Grid>
+                </Row>
               </Grid>
             </Grid.Container>
           </Card.Footer>

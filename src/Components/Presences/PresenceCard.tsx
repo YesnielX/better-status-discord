@@ -1,6 +1,11 @@
+import { usePresence } from "@BetterStatus/Contexts/PresenceContext";
+import IPresence from "@BetterStatus/Interfaces/Presence";
 import { Button, Card, Col, Grid, Text } from "@nextui-org/react";
+import Link from "next/link";
 
-const Prensence = (props: { title: string; description: string }) => {
+const Prensence = (props: { presence: IPresence }) => {
+  const { deletePresence } = usePresence();
+
   return (
     <Grid xs={12} sm={3}>
       <Card
@@ -11,7 +16,7 @@ const Prensence = (props: { title: string; description: string }) => {
       >
         <Card.Body css={{ p: 9 }}>
           <Card.Image
-            src="https://cdn.discordapp.com/app-icons/841512699350745099/71f3a0fe00d676919e95c07a82527700.png?size=512"
+            src={props.presence.imageURL || "/discord.png"}
             width="100%"
             height={150}
             alt="Card image background"
@@ -31,20 +36,28 @@ const Prensence = (props: { title: string; description: string }) => {
                 transform="uppercase"
                 color="#ffffffAA"
               >
-                {props.description}
+                {props.presence.details}
               </Text>
               <Text h4 color="white">
-                {props.title}
+                {props.presence.name}
               </Text>
             </Col>
             <Grid>
-              <Button auto color="error">
+              <Button
+                auto
+                color="error"
+                onPress={() => {
+                  deletePresence(props.presence.name);
+                }}
+              >
                 Delete
               </Button>
             </Grid>
             <Grid>
               <Button auto color="success">
-                Connect
+                <Link href={`/edit/${props.presence.id}`}>
+                  <Text color="White">Start</Text>
+                </Link>
               </Button>
             </Grid>
           </Grid.Container>

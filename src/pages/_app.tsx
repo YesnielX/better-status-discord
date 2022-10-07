@@ -1,7 +1,12 @@
 import { createTheme, NextUIProvider } from "@nextui-org/react";
-import type { AppProps } from "next/app";
-
+import RedirectAnim from "Animations/RedirectAnim";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import type { AppProps } from "next/app";
+import { SnackbarProvider } from "notistack";
+import Zoom from "../Animations/notistack/Zoom";
+import AppNavbar from "../Components/Presences/AppNavbar";
+import { PresencesProvider } from "../Contexts/PresenceContext";
+import "./styles.css";
 
 const lightTheme = createTheme({
   type: "light",
@@ -20,7 +25,7 @@ const darkTheme = createTheme({
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <NextThemesProvider
-      defaultTheme="system"
+      defaultTheme="dark"
       attribute="class"
       value={{
         light: lightTheme.className,
@@ -28,7 +33,21 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <NextUIProvider>
-        <Component {...pageProps} />
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          TransitionComponent={Zoom}
+        >
+          <AppNavbar>
+            <PresencesProvider>
+              <RedirectAnim>
+                <Component {...pageProps} />
+              </RedirectAnim>
+            </PresencesProvider>
+          </AppNavbar>
+        </SnackbarProvider>
       </NextUIProvider>
     </NextThemesProvider>
   );
