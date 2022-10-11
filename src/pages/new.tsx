@@ -12,6 +12,7 @@ import {
   Switch,
   Text,
 } from "@nextui-org/react";
+import { open as OpenInBrowser } from "@tauri-apps/api/shell";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -48,20 +49,85 @@ const NewPresence = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setAppCooldown(true);
-
     if (isConnected) {
+      setAppCooldown(true);
       enqueueSnackbar("Disconnected", {
         variant: "info",
       });
 
+      // fetch DELETE to /api/activity for disconnect presence.
+      fetch("/api/activity", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+
+          // notify disconnected.
+          enqueueSnackbar(`${data.message}`, {
+            variant: "success",
+          });
+        });
+
       setIsConnected(false);
     } else {
-      enqueueSnackbar("Saved And Connected", {
+      if (
+        presence.largeImageKey.length <= 2 ||
+        presence.largeImageText.length <= 2 ||
+        presence.smallImageKey.length <= 2 ||
+        presence.smallImageText.length <= 2
+      ) {
+        enqueueSnackbar("Some entries must have length > 2", {
+          variant: "info",
+        });
+        return;
+      }
+
+      if (
+        presence.largeImageKey.length >= 15 ||
+        presence.largeImageText.length >= 15 ||
+        presence.smallImageKey.length >= 15 ||
+        presence.smallImageText.length >= 15
+      ) {
+        enqueueSnackbar("Some entries must have length <= 15", {
+          variant: "info",
+        });
+        return;
+      }
+
+      setAppCooldown(true);
+
+      enqueueSnackbar("Saved And Connecting", {
         variant: "success",
       });
 
       setIsConnected(true);
+
+      // fetch POST to /api/activity with presence object.
+      fetch("/api/activity", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(presence),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          // notify connected
+          enqueueSnackbar("Connected!!", {
+            variant: "success",
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          enqueueSnackbar("Error Connecting", {
+            variant: "error",
+          });
+        });
     }
 
     setTimeout(() => {
@@ -141,7 +207,12 @@ const NewPresence = () => {
                   src={presence.imageURL || "/discord.png"}
                   width="100%"
                   height={150}
-                  alt="Card image background"
+                  alt="Presence Image"
+                  onClick={() => {
+                    OpenInBrowser(
+                      `https://discord.com/developers/applications/${presence.appId}/rich-presence/assets`
+                    );
+                  }}
                 />
               </Card.Body>
               <Card.Footer
@@ -347,7 +418,7 @@ const NewPresence = () => {
                             color={isConnected ? "primary" : "success"}
                             type="submit"
                             disabled={
-                              !presence.id ||
+                              !presence.appId ||
                               !presence.name ||
                               !presence.details ||
                               !presence.state ||
