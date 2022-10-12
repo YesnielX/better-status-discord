@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { ChangeEvent, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import isURL from "validator/lib/isURL";
 
 const NewPresence = () => {
   const { updatePresence, createPresence, presences } = usePresence();
@@ -39,6 +40,16 @@ const NewPresence = () => {
     largeImageText: "Large Image Text",
     smallImageKey: "Small Image Key",
     smallImageText: "Small Image Text",
+    buttons: [
+      {
+        label: "one button",
+        url: "https://google.com",
+      },
+      {
+        label: "two button",
+        url: "https://youtube.com",
+      },
+    ],
     timestamp: false,
   });
 
@@ -46,14 +57,29 @@ const NewPresence = () => {
     setPresence({ ...presence, [e.target.name]: e.target.value });
   };
 
+  const handleChangeButtons = (e: ChangeEvent<FormElement>) => {
+    // if the label is empty remove from presence.buttons array.
+
+    // if (presence.buttons[0].label === "" && presence.buttons[0].url === "") {
+    //   delete presence.buttons[0]
+    // } else  if (presence.buttons[1].label === "" && presence.buttons[1].url === "") {
+    //   delete presence.buttons[1]
+    // }
+
+    if (e.target.name === "label") {
+      presence.buttons[e.target.id === "oneButton" ? 0 : 1].label =
+        e.target.value;
+    } else if (e.target.name === "url") {
+      presence.buttons[e.target.id === "oneButton" ? 0 : 1].url =
+        e.target.value;
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (isConnected) {
       setAppCooldown(true);
-      enqueueSnackbar("Disconnected", {
-        variant: "info",
-      });
 
       // fetch DELETE to /api/activity for disconnect presence.
       fetch("/api/activity", {
@@ -69,6 +95,7 @@ const NewPresence = () => {
           // notify disconnected.
           enqueueSnackbar(`${data.message}`, {
             variant: "success",
+            preventDuplicate: true,
           });
         });
 
@@ -82,6 +109,7 @@ const NewPresence = () => {
       ) {
         enqueueSnackbar("Some entries must have length > 2", {
           variant: "info",
+          preventDuplicate: true,
         });
         return;
       }
@@ -94,7 +122,29 @@ const NewPresence = () => {
       ) {
         enqueueSnackbar("Some entries must have length <= 15", {
           variant: "info",
+          preventDuplicate: true,
         });
+        return;
+      }
+
+      if (presence.appId.length > 18) {
+        enqueueSnackbar("App ID must have 18 length", {
+          variant: "error",
+          preventDuplicate: true,
+        });
+        return;
+      }
+
+      if (
+        (presence.buttons[0].url.length > 6 &&
+          !isURL(presence.buttons[0].url)) ||
+        (presence.buttons[1].url.length > 6 && !isURL(presence.buttons[1].url))
+      ) {
+        enqueueSnackbar("button URL invalid", {
+          variant: "error",
+          preventDuplicate: true,
+        });
+
         return;
       }
 
@@ -102,6 +152,7 @@ const NewPresence = () => {
 
       enqueueSnackbar("Saved And Connecting", {
         variant: "success",
+        preventDuplicate: true,
       });
 
       setIsConnected(true);
@@ -118,14 +169,16 @@ const NewPresence = () => {
         .then((data) => {
           console.log(data);
           // notify connected
-          enqueueSnackbar("Connected!!", {
-            variant: "success",
+          enqueueSnackbar(data.message, {
+            variant: data.variant,
+            preventDuplicate: true,
           });
         })
         .catch((error) => {
           console.error(error);
           enqueueSnackbar("Error Connecting", {
             variant: "error",
+            preventDuplicate: true,
           });
         });
     }
@@ -146,6 +199,7 @@ const NewPresence = () => {
         presence.largeImageText,
         presence.smallImageKey,
         presence.smallImageText,
+        presence.buttons,
         presence.timestamp
       );
     } else {
@@ -160,6 +214,7 @@ const NewPresence = () => {
         presence.largeImageText,
         presence.smallImageKey,
         presence.smallImageText,
+        presence.buttons,
         presence.timestamp
       );
       setTimeout(() => {
@@ -224,7 +279,7 @@ const NewPresence = () => {
                   <Grid>
                     <Row>
                       <Col>
-                        <Text>Presence</Text>
+                        <Text h4>Presence</Text>
                         <Col>
                           <Grid.Container gap={1}>
                             <Grid>
@@ -261,7 +316,7 @@ const NewPresence = () => {
                         </Col>
                       </Col>
                       <Col>
-                        <Text>Details</Text>
+                        <Text h4>Details</Text>
                         <Col>
                           <Row>
                             <Col>
@@ -318,7 +373,7 @@ const NewPresence = () => {
                     </Row>
                     <Row justify="center">
                       <Col>
-                        <Text>Image</Text>
+                        <Text h4>Image</Text>
                         <Col>
                           <Row justify="center">
                             <Col>
@@ -386,6 +441,80 @@ const NewPresence = () => {
                                   value={presence.smallImageText}
                                   onChange={handleChange}
                                   required
+                                  status="default"
+                                  color="default"
+                                />
+                              </Grid>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Text h4>Buttons</Text>
+                        <br></br>
+                        <Col>
+                          <Row justify="center">
+                            <Col>
+                              <Grid justify="center">
+                                <Input
+                                  clearable
+                                  bordered
+                                  labelPlaceholder="First Button Name"
+                                  id="oneButton"
+                                  name="label"
+                                  type="text"
+                                  value={presence.buttons[0].label || ""}
+                                  onChange={handleChangeButtons}
+                                  status="default"
+                                  color="default"
+                                />
+                              </Grid>
+                            </Col>
+                            <Col>
+                              <Grid>
+                                <Input
+                                  clearable
+                                  bordered
+                                  labelPlaceholder="First Button URL"
+                                  id="oneButton"
+                                  name="url"
+                                  type="text"
+                                  value={presence.buttons[0].url || ""}
+                                  onChange={handleChangeButtons}
+                                  status="default"
+                                  color="default"
+                                />
+                              </Grid>
+                            </Col>
+                          </Row>
+                          <Row justify="center">
+                            <Col>
+                              <Grid justify="center">
+                                <br />
+                                <Input
+                                  clearable
+                                  bordered
+                                  labelPlaceholder="Second Button Name"
+                                  id="twoButton"
+                                  name="label"
+                                  type="text"
+                                  value={presence.buttons[1].label || ""}
+                                  onChange={handleChangeButtons}
+                                  status="default"
+                                  color="default"
+                                />
+                              </Grid>
+                            </Col>
+                            <Col>
+                              <Grid>
+                                <br />
+                                <Input
+                                  clearable
+                                  bordered
+                                  labelPlaceholder="Second Button URL"
+                                  id="twoButton"
+                                  name="url"
+                                  type="text"
+                                  value={presence.buttons[1].url || ""}
+                                  onChange={handleChangeButtons}
                                   status="default"
                                   color="default"
                                 />

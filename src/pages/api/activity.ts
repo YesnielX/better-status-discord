@@ -20,6 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         largeImageText,
         smallImageKey,
         smallImageText,
+        buttons,
         timestamp,
       } = req.body;
 
@@ -33,6 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           largeImageText,
           smallImageKey,
           smallImageText,
+
           instance: false,
         };
 
@@ -40,15 +42,34 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           activity["startTimestamp"] = startTimestamp;
         }
 
+        const buttonsFiltered = buttons.filter((button) =>
+          button.url.length > 6 ? true : false
+        ) as Array<{
+          label: string;
+          url: string;
+        }>;
+
+        if (buttonsFiltered.length > 0) {
+          activity["buttons"] = buttonsFiltered;
+        }
+
         await rpc.setActivity(activity);
       });
 
-      await rpc.login({ clientId: appId }).catch(console.error);
-
-      res.json({
-        messsage: "Success",
-        // rpc: rpc.application.id,
-      });
+      try {
+        await rpc.login({ clientId: appId });
+        res.json({
+          variant: "success",
+          message: "Connected!!",
+          // rpc: rpc.application.id,
+        });
+      } catch (error) {
+        console.error(error);
+        res.json({
+          variant: "error",
+          message: "Error, verify App ID",
+        });
+      }
     } else if (req.method === "DELETE") {
       await rpc.clearActivity();
 
