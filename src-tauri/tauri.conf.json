@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "better-status-discord",
-    "version": "0.1.0"
+    "version": "1.1.0"
   },
   "tauri": {
     "allowlist": {
@@ -16,7 +16,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Utility",
       "copyright": "",
       "deb": {
         "depends": []
@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.yesnielx.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -55,11 +55,12 @@
     },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 900,
-        "resizable": true,
         "title": "Better Status",
-        "width": 1500
+        "fullscreen": false,
+        "resizable": true,
+        "minWidth": 1500,
+        "minHeight": 900,
+        "theme": "Dark"
       }
     ]
   }
