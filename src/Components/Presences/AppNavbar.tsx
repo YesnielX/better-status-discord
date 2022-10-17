@@ -1,41 +1,60 @@
-import { Button, Navbar, Switch, Text, useTheme } from "@nextui-org/react";
-import { useTheme as useNextTheme } from "next-themes";
+import { Button, Navbar, Text } from "@nextui-org/react";
+import Image from "next/image";
 import Link from "next/link";
 
 const AppNavbar = ({ children }) => {
-  const { setTheme } = useNextTheme();
-
-  const { isDark } = useTheme();
-
   return (
     <>
       <Navbar isBordered maxWidth={"fluid"} variant={"sticky"}>
         <Navbar.Brand>
           <Text b color="inherit" hideIn={"xs"}>
-            <Link href="/">
-              <Text>Better Status</Text>
-            </Link>
+            <Text h3>Better Status</Text>
           </Text>
         </Navbar.Brand>
-        <Navbar.Content hideIn="xs">
+        <Navbar.Content enableCursorHighlight hideIn="xs" variant={"default"}>
           <Link href="/">
             <Navbar.Link isActive>Home</Navbar.Link>
           </Link>
-          <Navbar.Link href="/about">About</Navbar.Link>
+          <Link href="/new">
+            <Navbar.Link>About</Navbar.Link>
+          </Link>
         </Navbar.Content>
         <Navbar.Content>
           <Navbar.Item>
-            <Button auto flat>
+            <Button
+              auto
+              flat
+              icon={
+                <Image
+                  src="discord-logo.svg"
+                  alt="discord-logo"
+                  width="25"
+                  height="25"
+                />
+              }
+            >
               <Link href="/">
                 <Text>Discord</Text>
               </Link>
             </Button>
           </Navbar.Item>
           <Navbar.Item>
-            <Switch
-              checked={isDark}
-              onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
-            />
+            <Button
+              auto
+              flat
+              icon={
+                <Image
+                  src="/github-logoo.svg"
+                  alt="github-logo"
+                  width="25"
+                  height="25"
+                />
+              }
+            >
+              <Link href="/">
+                <Text>GitHub</Text>
+              </Link>
+            </Button>
           </Navbar.Item>
         </Navbar.Content>
       </Navbar>

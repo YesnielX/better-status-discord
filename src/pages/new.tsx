@@ -13,6 +13,7 @@ import {
   Text,
 } from "@nextui-org/react";
 import { open as OpenInBrowser } from "@tauri-apps/api/shell";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -536,6 +537,14 @@ const NewPresence = () => {
                             type="button"
                             disabled={appCooldown || isConnected}
                             onPress={handleClose}
+                            icon={
+                              <Image
+                                src="/close.png"
+                                alt="trash-icon"
+                                width={20}
+                                height={20}
+                              />
+                            }
                           >
                             <Text>Close</Text>
                           </Button>
@@ -556,6 +565,23 @@ const NewPresence = () => {
                               !presence.smallImageKey ||
                               !presence.smallImageText ||
                               appCooldown
+                            }
+                            icon={
+                              router.query.id && isConnected ? (
+                                <Image
+                                  src="/connected.png"
+                                  alt="trash-icon"
+                                  width={26}
+                                  height={26}
+                                />
+                              ) : (
+                                <Image
+                                  src="/disconnected.png"
+                                  alt="trash-icon"
+                                  width={26}
+                                  height={26}
+                                />
+                              )
                             }
                           >
                             {router.query.id && isConnected

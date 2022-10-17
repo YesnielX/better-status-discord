@@ -12,8 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       console.log(req.body);
       const {
         appId,
-        name,
-        imageURL,
         details,
         state,
         largeImageKey,

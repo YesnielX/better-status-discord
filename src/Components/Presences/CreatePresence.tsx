@@ -1,7 +1,10 @@
 import { Button, Card, Grid, Row, Text } from "@nextui-org/react";
-import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 const CreatePresence = () => {
+  const router = useRouter();
+
   return (
     <>
       <Grid xs={12} sm={3}>
@@ -35,10 +38,22 @@ const CreatePresence = () => {
 
                 <Row justify="center">
                   <Grid>
-                    <Button auto color="success">
-                      <Link href="/new" passHref={true}>
-                        <Text>Create</Text>
-                      </Link>
+                    <Button
+                      auto
+                      color="success"
+                      icon={
+                        <Image
+                          src="/new.png"
+                          alt="trash-icon"
+                          width={30}
+                          height={30}
+                        />
+                      }
+                      onClick={() => {
+                        router.push("/new");
+                      }}
+                    >
+                      <Text b>Create</Text>
                     </Button>
                   </Grid>
                 </Row>
