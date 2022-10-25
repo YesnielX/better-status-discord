@@ -4,13 +4,9 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import { SnackbarProvider } from "notistack";
 import Zoom from "../Animations/notistack/Zoom";
-import AppNavbar from "../Components/Presences/AppNavbar";
+import AppNavbar from "../Components/AppNavbar";
 import { PresencesProvider } from "../Contexts/PresenceContext";
 import "./styles.css";
-
-const lightTheme = createTheme({
-  type: "light",
-});
 
 const darkTheme = createTheme({
   type: "dark",
@@ -28,7 +24,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       defaultTheme="dark"
       attribute="class"
       value={{
-        light: lightTheme.className,
         dark: darkTheme.className,
       }}
     >

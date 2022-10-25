@@ -2,6 +2,7 @@ import { Box } from "@BetterStatus/Components/Box";
 import Prensences from "@BetterStatus/Components/Presences/Presences";
 import { usePresence } from "@BetterStatus/Contexts/PresenceContext";
 import { Container } from "@nextui-org/react";
+import RedirectAnim from "Animations/RedirectAnim";
 // import { invoke } from "@tauri-apps/api/tauri";
 import CreatePresence from "Components/Presences/CreatePresence";
 import Prensence from "Components/Presences/PresenceCard";
@@ -22,12 +23,14 @@ function App() {
       }}
     >
       <Container>
-        <Prensences>
-          <CreatePresence />
-          {presences.map((presence) => (
-            <Prensence presence={presence} key={presence.id} />
-          ))}
-        </Prensences>
+        <RedirectAnim>
+          <Prensences>
+            <CreatePresence />
+            {presences.map((presence) => (
+              <Prensence presence={presence} key={presence.id} />
+            ))}
+          </Prensences>
+        </RedirectAnim>
       </Container>
     </Box>
   );

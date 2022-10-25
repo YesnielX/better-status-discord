@@ -1,11 +1,20 @@
 import { Button, Navbar, Text } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const AppNavbar = ({ children }) => {
+  const router = useRouter();
   return (
     <>
-      <Navbar isBordered maxWidth={"fluid"} variant={"sticky"}>
+      <Navbar
+        isBordered
+        maxWidth={"fluid"}
+        variant={"sticky"}
+        css={{
+          display: `${router.pathname === "/splashscreen" ? "none" : "block"}`,
+        }}
+      >
         <Navbar.Brand>
           <Text b color="inherit" hideIn={"xs"}>
             <Text h3>Better Status</Text>
@@ -15,7 +24,7 @@ const AppNavbar = ({ children }) => {
           <Link href="/">
             <Navbar.Link isActive>Home</Navbar.Link>
           </Link>
-          <Link href="/new">
+          <Link href="/">
             <Navbar.Link>About</Navbar.Link>
           </Link>
         </Navbar.Content>

@@ -12,7 +12,6 @@ const RedirectAnim = ({ children }) => {
       animate="enter"
       exit="exit"
       transition={{ type: "linear" }}
-      className=""
     >
       {children}
     </motion.main>

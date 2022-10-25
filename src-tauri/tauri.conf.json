@@ -60,7 +60,19 @@
         "resizable": true,
         "minWidth": 1500,
         "minHeight": 900,
-        "theme": "Dark"
+        "theme": "Dark",
+        "visible": false,
+        "center": true,
+        "focus": true
+      },
+      {
+        "url": "splashscreen",
+        "label": "splashscreen",
+        "minWidth": 400,
+        "minHeight": 400,
+        "decorations": false,
+        "center": true,
+        "focus": true
       }
     ]
   }
